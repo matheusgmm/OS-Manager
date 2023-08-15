@@ -1,0 +1,81 @@
+
+<div class="card flex justify-content-center">
+    <p-toast></p-toast>
+    <div class="itens" >
+        <div class="column-info">
+            <div class="item">
+                <div class="item-title">
+                    <i class='bx bx-user'></i>
+                    <label>Nome</label>
+                </div>
+                <p>{{ orderService?.solicitante_nome }}</p>
+            </div>
+
+            <div class="item">
+                <div class="item-title">
+                    <i class='bx bx-envelope'></i>
+                    <label>E-mail</label>
+                </div>
+                <p>{{ orderService?.solicitante_email }}</p>
+            </div>
+
+            <div class="item">
+                <div class="item-title">
+                    <i class='bx bx-calendar-week'></i>
+                    <label>Data</label>
+                </div>
+                <p>{{ orderService?.data_solicitacao | date:'dd/MM/yyyy' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <form class="dropdown" [formGroup]="formGroup">
+        <div class="select card flex justify-content-center m-0">
+            <label for="float-label">Instituição</label>
+            <p-dropdown  formControlName="setor_principal_id" optionLabel="label" optionValue="value" [options]="setor_principal"  (onChange)="onChangeSetorPrincipal()"></p-dropdown>
+        </div>
+
+        <div class="select card flex justify-content-center m-0">
+            <label for="float-label">Setor</label>
+            <p-dropdown  formControlName="setor_secundario_id" [options]="setor_secundario"></p-dropdown>
+        </div>
+
+        <div class="select card flex justify-content-center m-0">
+            <label for="float-label">Categoria</label>
+            <p-dropdown formControlName="tipo_servico_id" optionLabel="label" optionValue="value" [options]="tipo_servico"></p-dropdown>
+        </div>
+
+        <div class="select card flex justify-content-center m-0">
+            <label for="float-label">Prioridade</label>
+            <p-dropdown formControlName="nivel_prioridade" [options]="nivel_prioridade" placeholder="Nível de prioridade"></p-dropdown>
+        </div>
+
+        <div class="select card flex justify-content-center m-0">
+            <label for="float-label">Responsável</label>
+            <p-dropdown formControlName="tecnico_id"  [options]="tecnico" placeholder="Técnico responsável"></p-dropdown>
+        </div>
+
+        <div class="fields" *ngIf="orderService">
+            <div class="fieldDescription">
+                <div class="item-title">
+                    <i class='bx bx-file'></i>
+                    <label>Descrição</label>
+                </div>
+                <textarea formControlName="descricao"  optionLabel="label" optionValue="value" class="textDescription" rows="5" cols="30" pInputTextarea [autoResize]="true" placeholder="Relatório do serviço realizado"></textarea>
+            </div>
+        </div>
+    </form>
+
+    <div class="card flex justify-content-center btn-submit">
+        <button  class="btn btn-confirm" (click)="getFormValues()">Aprovar</button>
+        <button  class="btn btn-decline" (click)="openModalDecline()">Declinar</button>
+    </div>
+</div>
+
+<p-confirmDialog #cd [style]="{ width: '450px' }">
+    <ng-template pTemplate="footer">
+        <button pButton type="button" icon="pi pi-times" label="Não" styleClass="p-button-danger" (click)="cd.reject()"></button>
+        <button pButton type="button" icon="pi pi-check" label="Sim" styleClass="p-button-success" (click)="cd.accept()"></button>
+    </ng-template>
+</p-confirmDialog>
+

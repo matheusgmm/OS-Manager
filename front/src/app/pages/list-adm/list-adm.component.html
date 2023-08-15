@@ -1,0 +1,82 @@
+<div class="menu">
+    <app-menu></app-menu>
+</div>
+
+<div class="container">
+    <div class="card">
+        <p-toast></p-toast>
+        <p-table
+            #dt1
+            [value]="userList"
+            dataKey="id"
+            [rows]="5"
+            [rowHover]="true"
+            [pEditableRow]="true"
+            [showCurrentPageReport]="true"
+            [paginator]="true"
+            currentPageReportTemplate=" {last} de {totalRecords}"
+            [globalFilterFields]="['nome', 'email', 'cargo', 'terceirizado']"
+            >
+            <ng-template pTemplate="caption">
+                
+                    <span class="p-input-icon-left ml-auto">
+                        <i class="pi pi-search"></i>
+                        <input #inputSearch pInputText type="text" (input)="dt1.filterGlobal(inputSearch.value, 'contains')" placeholder="Pesquisar"/>
+                    </span>
+
+                    <div class="new-user">
+                        <p-button (click)="openModal()" label="Novo" icon="pi pi-user-plus" iconPos="right" styleClass="p-button-success"></p-button>
+                    </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="min-width:15rem">
+                        <div class="flex align-items-center">Nome</div>
+                    </th>
+                    <th style="min-width:15rem">
+                        <div class="flex align-items-center">E-mail</div>
+                    </th>
+                    <th style="min-width:15rem">
+                        <div class="flex align-items-center">Cargo</div>
+                    </th>
+                    <th style="min-width:10rem">
+                        <div class="flex align-items-center">Categoria</div>
+                    </th>
+                    <th style="min-width:10rem">
+                        <div class="flex align-items-center">Terceiro</div>
+                    </th>
+                    <th style="min-width:10rem">
+                        <div class="flex align-items-center">Data</div>
+                    </th>
+                   
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user>
+                <tr class="p-selectable-row">
+                    <td> {{ user.nome }} </td>
+                    <td> {{ user.email }} </td>
+                    <td> {{ user.cargo }} </td>
+                    <td> {{ user.tipo_servico_nome || 'Nenhuma' }} </td>
+                    <td> {{ user.terceirizado }} </td>
+                    <td> {{ user.data_insercao ? (user.data_insercao | date:'dd/MM/yyyy') : '16/06/2023' }} </td>
+                    <td>
+                        <p-button icon="pi pi-ellipsis-v" styleClass="p-button-rounded p-button-secondary p-button-text" (click)="editUser(user)"></p-button>
+                    </td>
+                    
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7">Usuário não encontrado.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+
+<p-dialog *ngIf="displayModalEdit" [(visible)]="displayModalEdit" [style]="{ width: '450px' }" header="Editar Usuário" [modal]="true" styleClass="p-fluid">
+    <app-modal-edit-user [userInfo]="selectedUser" (displayModalEvent)="attModalEdit($event)"></app-modal-edit-user>
+</p-dialog>
+
